@@ -15,10 +15,9 @@ hospitals$lat <- gsub("Â",".", hospitals$lat)
 
 hospitals$lat <- as.numeric(hospitals$lat)
 hospitals$lon <- as.numeric(hospitals$lon)
-p <- qmap("India", zoom = 5, maptype = "toner")
+p <- qmap("India", zoom = 5, color = "bw", maptype = "hybrid")
 p <- p + geom_point(aes(x = lon, y = lat, color = Hospital.Category, size = 4, alpha = 0.6),
-               pch = 19, data = hospitals) + guides(alpha = FALSE)
-
+               pch = 19, data = hospitals) + guides(alpha = FALSE, size = FALSE)
 png("hospital_map.png", width = 720, height = 720)
 print(p)
 dev.off()
