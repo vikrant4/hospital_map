@@ -7,6 +7,8 @@ if(!file.exists("datafile.csv")){
 hospitals <- read.csv("datafile.csv")
 colnames(hospitals)[22] <- "lat"
 colnames(hospitals)[23] <- "lon"
+
+hospitals$Hospital.Category <- tolower(hospitals$Hospital.Category)
 hospitals$lon <- gsub("'", "", hospitals$lon)
 hospitals$lon <- gsub("Â",".", hospitals$lon)
 
@@ -15,9 +17,10 @@ hospitals$lat <- gsub("Â",".", hospitals$lat)
 
 hospitals$lat <- as.numeric(hospitals$lat)
 hospitals$lon <- as.numeric(hospitals$lon)
-p <- qmap("India", zoom = 5, color = "bw", maptype = "hybrid")
-p <- p + geom_point(aes(x = lon, y = lat, color = Hospital.Category, size = 4, alpha = 0.6),
+map <- get_map("India", zoom = 5, source = "google", maptype = "terrain", color = "bw")
+hospital_map <- ggmap(map, extent = "device",legend = "topleft")
+hospital_map <- p + geom_point(aes(x = lon, y = lat, size = 4, alpha = 0.6, color = Hospital.Category),
                pch = 19, data = hospitals) + guides(alpha = FALSE, size = FALSE)
 png("hospital_map.png", width = 720, height = 720)
-print(p)
+print(hospital_map)
 dev.off()
